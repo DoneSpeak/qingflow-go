@@ -11,8 +11,8 @@ func main() {
 	BaseUrl := "https://api.qingflow.com"
 	appKey := "1f2d6b89"
 	token := qingflow.SimpleAccessToken{Value: "45c689b3-c888-4636-b7ce-3c2342712609"}
-	HttpClient := &http.Client{}
-	apiClient := &qingflow.Client{BaseUrl: BaseUrl, Token: token, HttpClient: *HttpClient}
+	HttpClient := http.Client{}
+	apiClient := qingflow.Client{BaseUrl: BaseUrl, Token: token, HttpClient: HttpClient}
 	api := apiClient.Apply(appKey)
 
 	query := qingflow.ApplyQuery{PageSize: 3, PageNumber: 1}

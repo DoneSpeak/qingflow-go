@@ -26,16 +26,16 @@ const (
 )
 
 type ApiResponse[R any] struct {
-	ErrCode           int      `json:"err_code"`
-	ErrMsg            string   `json:"err_msg"`
-	QuestionRelations []string `json:"question_relations"`
+	ErrCode           int      `json:"errCode"`
+	ErrMsg            string   `json:"errMsg"`
+	QuestionRelations []string `json:"questionRelations"`
 	Result            R        `json:"result"`
 }
 
 type PageResult[R any] struct {
-	PageAmount int `json:"page_amount"`
-	PageNum    int `json:"page_num"`
-	PageSize   int `json:"page_size"`
+	PageAmount int `json:"pageAmount"`
+	PageNum    int `json:"pageNum"`
+	PageSize   int `json:"pageSize"`
 	Result     []R `json:"result"`
 }
 

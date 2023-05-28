@@ -37,31 +37,43 @@ func (api ApplyApi) FindById(applyId string) (Apply, error) {
 }
 
 type ApplyQuery struct {
-	PageSize   int
-	PageNumber int
-	Type       int
+	PageSize   int `json:"pageSize"`
+	PageNumber int `json:"pageNumber"`
+	Type       int `json:"type"`
 	Sorts      []struct {
-		QueId    int
-		IsAscend bool
-	}
+		QueId    int  `json:"queId"`
+		IsAscend bool `json:"isAscend"`
+	} `json:"sorts"`
 	Queries []struct {
-		QueId         int
-		SearchKey     string
-		SearchKeys    []string
-		MinValue      string
-		MaxValue      string
-		Scope         int
-		SearchOptions []int
-		SearchUserIds []string
-	}
-	QueryKey string
-	ApplyIds []int
+		QueId         int      `json:"queId"`
+		SearchKey     string   `json:"searchKey"`
+		SearchKeys    []string `json:"searchKeys"`
+		MinValue      string   `json:"minValue"`
+		MaxValue      string   `json:"maxValue"`
+		Scope         int      `json:"scope"`
+		SearchOptions []int    `json:"searchOptions"`
+		SearchUserIds []string `json:"searchUserIds"`
+	} `json:"queries"`
+	QueryKey string `json:"queryKey"`
+	ApplyIds []int  `json:"applyIds"`
 }
 
-type Apply struct{}
+type Apply struct {
+	ApplyId       string   `json:"applyId"`
+	Answers       []Answer `json:"answers"`
+	ApplyBaseInfo string   `json:"applyBaseInfo"`
+}
 
 type Answer struct {
-	AssociateQueType int
+	QueId       int      `json:"queId"`
+	QueTitle    string   `json:"queTitle"`
+	QueType     int      `json:"queType"`
+	TableValues []string `json:"tableValues"`
+	Values      []struct {
+		Value     string `json:"value"`
+		OtherInfo string `json:"otherInfo"`
+		Id        string `json:"id"`
+	} `json:"values"`
 }
 
 type CreateRequest struct{}
