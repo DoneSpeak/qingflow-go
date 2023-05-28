@@ -1,0 +1,72 @@
+# config for pre-commit
+# see https://pre-commit.com/
+
+repos:
+  - repo: http://gitlab.bees360.com/engineers/pre-commit-hooks
+    rev: v4.2.0
+    hooks:
+      - id: end-of-file-fixer
+        exclude_types: [json, xml]
+        exclude: ^.*\.egg-info/
+      - id: trailing-whitespace
+      - id: check-merge-conflict
+      - id: check-case-conflict
+      - id: check-json
+      - id: check-toml
+        exclude: tests/fixtures/invalid_lock/poetry\.lock
+      - id: check-yaml
+      - id: pretty-format-json
+        args: [--autofix, --no-ensure-ascii, --no-sort-keys]
+      - id: check-ast
+      - id: debug-statements
+      - id: check-docstring-first
+  - repo: local
+    hooks:
+      - id: post-checkout
+        name:  customized-post-checkout
+        entry: .customized/hook-exec -t post-checkout
+        language: script
+        stages: [post-checkout]
+        # verbose: true
+      - id: prepare-commit-msg
+        name: customized-prepare-commit
+        entry: .customized/hook-exec -t prepare-commit-msg
+        language: script
+        stages: [prepare-commit-msg]
+        # verbose: true
+      - id: commit-msg
+        name: customized-commit-msg
+        entry: .customized/hook-exec -t commit-msg
+        language: script
+        stages: [commit-msg]
+        # verbose: true
+      - id: pre-commit
+        name: customized-pre-commit
+        entry: .customized/hook-exec -t pre-commit
+        language: script
+        stages: [commit]
+        # verbose: true
+      - id: post-commit
+        name: customized-post-commit
+        entry: .customized/hook-exec -t post-commit
+        language: script
+        stages: [post-commit]
+        # verbose: true
+      - id: pre-merge-commit
+        name: customized-pre-merge-commit
+        entry: .customized/hook-exec -t pre-merge-commit
+        language: script
+        stages: [merge-commit]
+        # verbose: true
+      - id: post-merge
+        name: customized-post-merge
+        entry: .customized/hook-exec -t post-merge
+        language: script
+        stages: [post-merge]
+        # verbose: true
+      - id: pre-push
+        name: customized-pre-push
+        entry: .customized/hook-exec -t pre-push
+        language: script
+        stages: [push]
+        # verbose: true
