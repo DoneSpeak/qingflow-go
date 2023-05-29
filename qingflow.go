@@ -51,13 +51,7 @@ func (c Client) createUrl(path string) string {
 }
 
 func (c Client) get(path string, result any) error {
-	url := c.createUrl(path)
-	req, err := http.NewRequest("GET", url, nil)
-	if err != nil {
-		return err
-	}
-	err = c.executeRequest(req, result)
-	return err
+	return c.execute("GET", path, nil, result)
 }
 
 func (c Client) post(path string, body any, result any) error {
@@ -100,7 +94,9 @@ func (c Client) execute(method string, path string, body any, result any) error 
 func (c Client) executeRequest(request *http.Request, result any) error {
 	request.Header.Add("Accept", `application/json`)
 	request.Header.Add("Content-Type", `application/json`)
-	request.Header.Add("accessToken", c.Token.getValue())
+	if c.Token != nil {
+		request.Header.Add("accessToken", c.Token.getValue())
+	}
 	resp, err := c.HttpClient.Do(request)
 	if err != nil {
 		// transfer to customized error
@@ -113,9 +109,10 @@ func (c Client) executeRequest(request *http.Request, result any) error {
 	return nil
 }
 
-func defaultClient(baseUrl string) Client {
-	HttpClient := http.Client{Timeout: time.Duration(30) * time.Second}
-	return Client{BaseUrl: baseUrl, HttpClient: HttpClient}
+func DefaultClient() Client {
+	baseUrl := "https://api.qingflow.com"
+	httpClient := http.Client{Timeout: time.Duration(30) * time.Second}
+	return Client{BaseUrl: baseUrl, HttpClient: httpClient}
 }
 
 func (c Client) User() UserApi {
@@ -124,4 +121,8 @@ func (c Client) User() UserApi {
 
 func (c Client) Apply(appKey string) ApplyApi {
 	return ApplyApi{client: c, appKey: appKey}
+}
+
+func (c Client) Auth() AuthApi {
+	return AuthApi{client: c}
 }
