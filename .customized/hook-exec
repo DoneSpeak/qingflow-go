@@ -1,0 +1,23 @@
+#!/bin/bash
+
+usage() {
+  echo "usage: hook-exec -t <hook-type>"
+}
+
+hook_type=''
+while getopts "t": opt; do
+  case "${opt}" in
+    t ) hook_type="$OPTARG" ;;
+  esac
+done
+
+if [ $OPTIND = 1 ]; then
+  usage
+fi
+
+readonly HOOK_DIR=$(dirname "$0")
+readonly CUSTOM_HOOK="$HOOK_DIR/.git_hooks/$hook_type"
+
+if [ -f  "$CUSTOM_HOOK" ]; then
+  source $CUSTOM_HOOK
+fi
