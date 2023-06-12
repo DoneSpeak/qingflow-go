@@ -70,9 +70,15 @@ type Answer struct {
 	QueType     int      `json:"queType"`
 	TableValues []string `json:"tableValues"`
 	Values      []struct {
-		Value     string `json:"value"`
-		OtherInfo string `json:"otherInfo"`
-		Id        string `json:"id"`
+		DataValue   string `json:"dataValue"`
+		Id          string `json:"id"`
+		Email       string `json:"email"`
+		OptionId    string `json:"optionId"`
+		Ordinal     string `json:"ordinal"`
+		OtherInfo   string `json:"otherInfo"`
+		PluginValue string `json:"pluginValue"`
+		QueId       int    `json:"queId"`
+		Value       string `json:"value"`
 	} `json:"values"`
 }
 
