@@ -1,3 +1,3 @@
-package qingflow
+package qingflowapi
 
 type RoleApi struct{}

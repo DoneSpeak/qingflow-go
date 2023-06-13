@@ -1,4 +1,4 @@
-package qingflow
+package qingflowapi
 
 import (
 	"fmt"

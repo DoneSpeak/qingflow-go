@@ -4,17 +4,17 @@ import (
 	"fmt"
 	"os"
 
-	"github.com/DoneSpeak/qingflow-go"
+	qingflowapi "github.com/DoneSpeak/qingflow-go"
 )
 
-func getCredential() qingflow.Credential {
+func getCredential() qingflowapi.Credential {
 	wsId := os.Getenv("QINGFLOW_WSID")
 	wsSecret := os.Getenv("QINGFLOW_WSSECRET")
-	return qingflow.Credential{WsId: wsId, WsSecret: wsSecret}
+	return qingflowapi.Credential{WsId: wsId, WsSecret: wsSecret}
 }
 
-func getToken() qingflow.AccessToken {
-	api := qingflow.DefaultClient().Auth()
+func getToken() qingflowapi.AccessToken {
+	api := qingflowapi.DefaultClient().Auth()
 	cred := getCredential()
 	fmt.Println("Cred: ", cred)
 	token, err := api.GrantToken(cred)

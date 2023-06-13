@@ -1,3 +1,3 @@
-package qingflow
+package qingflowapi
 
 type ManagerApi struct{}
