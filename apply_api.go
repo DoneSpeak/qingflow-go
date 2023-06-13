@@ -37,10 +37,10 @@ func (api ApplyApi) FindById(applyId string) (Apply, error) {
 }
 
 type ApplyQuery struct {
-	PageSize   int `json:"pageSize"`
-	PageNumber int `json:"pageNumber"`
-	Type       int `json:"type"`
-	Sorts      []struct {
+	PageSize int `json:"pageSize"`
+	PageNum  int `json:"pageNum"`
+	Type     int `json:"type"`
+	Sorts    []struct {
 		QueId    int  `json:"queId"`
 		IsAscend bool `json:"isAscend"`
 	} `json:"sorts"`
