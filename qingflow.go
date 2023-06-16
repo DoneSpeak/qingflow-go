@@ -248,29 +248,24 @@ func (c Client) createUrl(path string) string {
 	return c.BaseUrl + "/" + path
 }
 
-func (c Client) get(path string, result any) error {
+func (c Client) get(path string, result *ApiResponse[any]) error {
 	return c.execute("GET", path, nil, result)
 }
 
-func (c Client) post(path string, body any, result any) error {
+func (c Client) post(path string, body any, result *ApiResponse[any]) error {
 	return c.execute("POST", path, body, result)
 }
 
-func (c Client) put(path string, body any, result any) error {
+func (c Client) put(path string, body any, result *ApiResponse[any]) error {
 	return c.execute("PUT", path, body, result)
 }
 
 func (c Client) delete(path string) error {
-	var result ApiResponse[any]
-	err := c.execute("DELETE", path, nil, result)
-	if err != nil {
-		return err
-	}
-	fmt.Println("response: ", result)
-	return err
+	var result *ApiResponse[any]
+	return c.execute("DELETE", path, nil, result)
 }
 
-func (c Client) execute(method string, path string, body any, result any) error {
+func (c Client) execute(method string, path string, body any, result *ApiResponse[any]) error {
 	var jsonBytes io.Reader
 	if body != nil {
 		jsonBody, err := json.Marshal(body)
@@ -289,7 +284,7 @@ func (c Client) execute(method string, path string, body any, result any) error 
 	return c.executeRequest(request, result)
 }
 
-func (c Client) executeRequest(request *http.Request, result any) error {
+func (c Client) executeRequest(request *http.Request, result *ApiResponse[any]) error {
 	request.Header.Add("Accept", `application/json`)
 	request.Header.Add("Content-Type", `application/json`)
 	if c.Token != nil {
@@ -304,7 +299,10 @@ func (c Client) executeRequest(request *http.Request, result any) error {
 	body, _ := io.ReadAll(resp.Body)
 	fmt.Println("Body: ", string(body))
 	json.Unmarshal(body, result)
-	return nil
+
+	code := result.ErrCode
+	message := result.ErrMsg
+	return translateError(code, message)
 }
 
 func DefaultClient() Client {

@@ -32,7 +32,10 @@ func (api ApplyApi) Create(request CreateRequest) (CreateResponse, error) {
 func (api ApplyApi) FindById(applyId string) (Apply, error) {
 	path := fmt.Sprintf("app/%s/apply/%s", api.appKey, applyId)
 	var result ApiResponse[Apply]
-	api.client.get(path, &result)
+	err := api.client.get(path, &result)
+	if err != nil {
+		return Apply{}, err
+	}
 	return result.Result, nil
 }
 
