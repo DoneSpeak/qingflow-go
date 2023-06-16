@@ -17,7 +17,7 @@ func filterApply() {
 	apiClient := qingflowapi.Client{BaseUrl: BaseUrl, Token: token, HttpClient: HttpClient}
 	api := apiClient.Apply(appKey)
 
-	query := qingflowapi.ApplyQuery{PageSize: 3, PageNumber: 1}
+	query := qingflowapi.ApplyQuery{PageSize: 3, PageNum: 1}
 	result, err := api.Query(query)
 	if err != nil {
 		return
