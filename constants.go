@@ -107,9 +107,11 @@ const (
 	SPECIAL_QUE_DATA_UID = -17
 )
 
+type AuditResultType int
+
 const (
 	// 提交处理
-	AUDIT_RESULT_SUBMITTED = 1
+	AUDIT_RESULT_SUBMITTED AuditResultType = 1
 	// 通过
 	AUDIT_RESULT_PASS = 2
 	// 拒绝
