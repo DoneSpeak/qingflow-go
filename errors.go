@@ -1,5 +1,7 @@
 package qingflowapi
 
+import "strconv"
+
 type ApiError struct {
 	Code           int
 	Message        string
@@ -7,7 +9,7 @@ type ApiError struct {
 }
 
 func (e ApiError) Error() string {
-	return e.Code + ":" + e.Message
+	return strconv.Itoa(e.Code) + ":" + e.Message
 }
 
 func newApiError(code int, message string, defaultMessage string) ApiError {

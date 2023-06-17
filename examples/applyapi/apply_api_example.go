@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"net/http"
 	"os"
+	"reflect"
 
 	qingflowapi "github.com/DoneSpeak/qingflow-go"
 )
@@ -20,8 +21,13 @@ func filterApply() {
 	query := qingflowapi.ApplyQuery{PageSize: 3, PageNum: 1}
 	result, err := api.Query(query)
 	if err != nil {
+		fmt.Println("Error", err.Error(), reflect.TypeOf(err))
 		return
 	}
 
 	fmt.Println("Result: ", result)
+}
+
+func main() {
+	filterApply()
 }
