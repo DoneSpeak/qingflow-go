@@ -11,6 +11,10 @@ import (
 
 type ID int64
 
+type SID string
+
+type RequestID string
+
 type QuestionRelation struct {
 	QueId             string      `json:"queId"`
 	MatchRuleType     int         `json:"matchRuleType"`

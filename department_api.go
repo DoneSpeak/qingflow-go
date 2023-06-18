@@ -114,7 +114,10 @@ func (api DepartmentApi) Delete(deptId ID) (ID, error) {
 	return result.Result.DeptId, nil
 }
 
-func (api DepartmentApi) GetUndeparted() ([]ID, []User, error) {
+/*
+获取不在部门的成员
+*/
+func (api DepartmentApi) GetUndepartedUser() ([]ID, []User, error) {
 	endpoint := "user/undeparted"
 	var result ApiResponse[struct {
 		LeaderIds []ID   `json:"leaderIds"`

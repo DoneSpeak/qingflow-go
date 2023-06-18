@@ -1,9 +1,6 @@
 package qingflowapi
 
-import (
-	"fmt"
-	"strconv"
-)
+import "fmt"
 
 type UserApi struct {
 	client Client
@@ -68,48 +65,23 @@ func (api UserApi) Create(user User) (SID, error) {
 	return result.Result.UserId, nil
 }
 
-/*
-仅专有轻流支持；
-「超管accessToken」和「权限组accessToken」都可以调用，「权限组accessToken」须具有通讯录权限。
-*/
 func (api UserApi) CreateBatch(users []User) (RequestID, error) {
 	endpoint := "user/batch"
 	request := map[string]any{
 		"members": users,
 	}
 	var result ApiResponse[struct {
-		RequestId RequestID `json:"requestId"`
+		RequestId requestID `json:"requestId"`
 	}]
-	err := api.client.post(endpoint, request, &result)
-	if err != nil {
-		return "", err
-	}
-	return result.Result.RequestId, nil
+	err := api.client.post()
 }
 
-/*
-「超管accessToken」和「权限组accessToken」都可以调用，「权限组accessToken」须具有通讯录权限。
-*/
 func (api UserApi) Get(userId SID) (User, error) {
 	endpoint := fmt.Sprintf("user/%s", userId)
 	var result ApiResponse[User]
 	err := api.client.get(endpoint, nil, &result)
 	if err != nil {
 		return User{}, err
-	}
-	return result.Result, nil
-}
-
-func (api UserApi) Page(page int, size int) (PageResult[User], error) {
-	endpoint := "user"
-	params := map[string]string{
-		"pageSize": strconv.Itoa(page),
-		"pageNum":  strconv.Itoa(size),
-	}
-	var result ApiResponse[PageResult[User]]
-	err := api.client.get(endpoint, params, &result)
-	if err != nil {
-		return PageResult[User]{}, err
 	}
 	return result.Result, nil
 }
