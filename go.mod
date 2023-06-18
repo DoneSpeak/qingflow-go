@@ -1,3 +1,3 @@
-module github.com/DoneSpeak/qingflow-go
+module github.com/bioelement/qingflow-go
 
 go 1.20

@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"os"
 
-	qingflowapi "github.com/DoneSpeak/qingflow-go"
+	qingflowapi "github.com/bioelement/qingflow-go"
 )
 
 func getCredential() qingflowapi.Credential {
@@ -14,7 +14,7 @@ func getCredential() qingflowapi.Credential {
 }
 
 func getToken() qingflowapi.AccessToken {
-	api := qingflowapi.DefaultClient().Auth()
+	api := qingflowapi.DefaultClient(nil).Auth()
 	cred := getCredential()
 	fmt.Println("Cred: ", cred)
 	token, err := api.GrantToken(cred)
