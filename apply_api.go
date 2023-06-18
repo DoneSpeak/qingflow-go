@@ -153,7 +153,7 @@ type ApplyQuery struct {
 }
 
 type Apply struct {
-	ApplyId       string   `json:"applyId"`
+	ApplyId       ID   `json:"applyId"`
 	Ordinal       int      `json:"ordinal"` // 如果是表格子字段，ordinal表示行号
 	Answers       []Answer `json:"answers"`
 	ApplyBaseInfo string   `json:"applyBaseInfo"`
