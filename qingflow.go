@@ -44,10 +44,10 @@ type AnswerValue struct {
 }
 
 type AuthMember struct {
-	UserIds           []ID `json:"userIds"`           // 可见的用户列表；外部用户id列表
-	DeptIds           []ID `json:"deptIds"`           // 可见的部门列表；外部部门id列表
-	RoleIds           []ID `json:"roleIds"`           // 可见的角色列表；外部角色id列表
-	IncludeSubDeparts bool `json:"includeSubDeparts"` // (应用已经使用相同字段)是否动态包含已选部门下的子部门，默认包含
+	UserIds           []SID `json:"userIds"`           // 可见的用户列表；外部用户id列表
+	DeptIds           []ID  `json:"deptIds"`           // 可见的部门列表；外部部门id列表
+	RoleIds           []ID  `json:"roleIds"`           // 可见的角色列表；外部角色id列表
+	IncludeSubDeparts bool  `json:"includeSubDeparts"` // (应用已经使用相同字段)是否动态包含已选部门下的子部门，默认包含
 }
 
 type CreatorUser struct {
