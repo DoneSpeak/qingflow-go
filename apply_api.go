@@ -21,13 +21,13 @@ func (api ApplyApi) Page(query ApplyQuery) (PageResult[Apply], error) {
 	return result.Result, nil
 }
 
-func (api ApplyApi) Update(applyId string, answers []Answer) (string, error) {
-	endpoint := fmt.Sprintf("apply/%s", applyId)
+func (api ApplyApi) Update(applyId ID, answers []Answer) (RequestID, error) {
+	endpoint := fmt.Sprintf("apply/%d", applyId)
 	request := map[string]any{
 		"answers": answers,
 	}
 	var result ApiResponse[struct {
-		RequestId string `json:"requestId"`
+		RequestId RequestID `json:"requestId"`
 	}]
 	err := api.client.post(endpoint, request, &result)
 	if err != nil {
@@ -36,8 +36,8 @@ func (api ApplyApi) Update(applyId string, answers []Answer) (string, error) {
 	return result.Result.RequestId, nil
 }
 
-func (api ApplyApi) Get(applyId string) (Apply, error) {
-	endpoint := fmt.Sprintf("apply/%s", applyId)
+func (api ApplyApi) Get(applyId ID) (Apply, error) {
+	endpoint := fmt.Sprintf("apply/%d", applyId)
 	var result ApiResponse[Apply]
 	err := api.client.get(endpoint, nil, &result)
 	if err != nil {
@@ -55,23 +55,23 @@ type ApplyCreationRequest struct {
 	Answers []Answer
 }
 
-func (api ApplyApi) Create(request ApplyCreationRequest) (string, string, error) {
+func (api ApplyApi) Create(request ApplyCreationRequest) (RequestID, ID, error) {
 	path := fmt.Sprintf("app/%s/apply", api.appKey)
 	var result ApiResponse[struct {
-		RequestId string `json:"requestId"`
-		ApplyId   string `json:"applyId"`
+		RequestId RequestID `json:"requestId"`
+		ApplyId   ID        `json:"applyId"`
 	}]
 	err := api.client.post(path, request, &result)
 	if err != nil {
-		return "", "", err
+		return "", 0, err
 	}
 	return result.Result.RequestId, result.Result.ApplyId, nil
 }
 
-func (api ApplyApi) DeletePage(query ApplyQuery) (string, error) {
+func (api ApplyApi) DeletePage(query ApplyQuery) (RequestID, error) {
 	endpoint := fmt.Sprintf("app/%s/apply", api.appKey)
 	var result ApiResponse[struct {
-		RequestId string `json:"requestId"`
+		RequestId RequestID `json:"requestId"`
 	}]
 	err := api.client.deleteRequest(endpoint, query, &result)
 	if err != nil {
@@ -80,8 +80,8 @@ func (api ApplyApi) DeletePage(query ApplyQuery) (string, error) {
 	return result.Result.RequestId, nil
 }
 
-func (api ApplyApi) GetAppApply(applyId string) (Apply, error) {
-	path := fmt.Sprintf("app/%s/apply/%s", api.appKey, applyId)
+func (api ApplyApi) GetAppApply(applyId ID) (Apply, error) {
+	path := fmt.Sprintf("app/%s/apply/%d", api.appKey, applyId)
 	var result ApiResponse[Apply]
 	err := api.client.get(path, nil, &result)
 	if err != nil {
@@ -149,20 +149,20 @@ type ApplyQuery struct {
 		SearchUserIds []string `json:"searchUserIds"`
 	} `json:"queries"`
 	QueryKey string `json:"queryKey"`
-	ApplyIds []int  `json:"applyIds"`
+	ApplyIds []ID   `json:"applyIds"`
 }
 
 type Apply struct {
-	ApplyId       ID   `json:"applyId"`
+	ApplyId       ID       `json:"applyId"`
 	Ordinal       int      `json:"ordinal"` // 如果是表格子字段，ordinal表示行号
 	Answers       []Answer `json:"answers"`
 	ApplyBaseInfo string   `json:"applyBaseInfo"`
 }
 
 type Answer struct {
-	QueId       ID          `json:"queId"`
-	QueTitle    string      `json:"queTitle"`
-	QueType     int         `json:"queType"`
+	QueId       ID            `json:"queId"`
+	QueTitle    string        `json:"queTitle"`
+	QueType     int           `json:"queType"`
 	TableValues [][]SubAnswer `json:"tableValues"`
 	Values      []struct {
 		DataValue   string `json:"dataValue"`
@@ -186,21 +186,21 @@ type Assignment struct {
 	UserIdList  []ID
 }
 
-func (api ApplyApi) Reassign(applyId string, assignments []Assignment) (string, error) {
-	endpoint := fmt.Sprintf("apply/%s/reassign", applyId)
+func (api ApplyApi) Reassign(applyId ID, assignments []Assignment) (ID, error) {
+	endpoint := fmt.Sprintf("apply/%d/reassign", applyId)
 	var result ApiResponse[Apply]
 	request := map[string][]Assignment{
 		"reassignmentInfo": assignments,
 	}
 	err := api.client.post(endpoint, request, &result)
 	if err != nil {
-		return "", err
+		return 0, err
 	}
 	return result.Result.ApplyId, nil
 }
 
-func (api ApplyApi) Rollback(applyId string, userId string, auditNodeId ID, targetAuditNodeId ID, auditFeedback string) error {
-	endpoint := fmt.Sprintf("%s/audit/rollback", applyId)
+func (api ApplyApi) Rollback(applyId ID, userId string, auditNodeId ID, targetAuditNodeId ID, auditFeedback string) error {
+	endpoint := fmt.Sprintf("%d/audit/rollback", applyId)
 	request := map[string]any{
 		"userId":            userId,
 		"auditNodeId":       auditNodeId,
@@ -229,7 +229,7 @@ type AuditRecord struct {
 }
 
 func (api ApplyApi) GetAuditRecord(applyId ID, AuditRcdId ID) (AuditRecord, error) {
-	endpoint := fmt.Sprintf("apply/%s/auditRecord/%s", applyId, AuditRcdId)
+	endpoint := fmt.Sprintf("apply/%d/auditRecord/%d", applyId, AuditRcdId)
 	var result ApiResponse[AuditRecord]
 	err := api.client.get(endpoint, nil, &result)
 	if err != nil {
@@ -284,7 +284,7 @@ type ApplyAuditRecordDetail struct {
 }
 
 func (api ApplyApi) GetAllAuditRecord(applyId ID) (ApplyAuditRecord, error) {
-	endpoint := fmt.Sprintf("apply/%s/auditRecord", applyId)
+	endpoint := fmt.Sprintf("apply/%d/auditRecord", applyId)
 	var result ApiResponse[ApplyAuditRecord]
 	err := api.client.get(endpoint, nil, &result)
 	if err != nil {
@@ -293,18 +293,18 @@ func (api ApplyApi) GetAllAuditRecord(applyId ID) (ApplyAuditRecord, error) {
 	return result.Result, nil
 }
 
-func (api ApplyApi) SetUrge(applyId string) (string, error) {
-	endpoint := fmt.Sprintf("apply/%s/urge", applyId)
+func (api ApplyApi) SetUrge(applyId ID) (ID, error) {
+	endpoint := fmt.Sprintf("apply/%d/urge", applyId)
 	var result ApiResponse[Apply]
 	err := api.client.post(endpoint, nil, &result)
 	if err != nil {
-		return "", err
+		return 0, err
 	}
 	return result.Result.ApplyId, nil
 }
 
-func (api ApplyApi) SetAuditResult(applyId string, auditResult AuditResultType, auditNodeId ID, auditFeedback string) (bool, error) {
-	endpoint := "%s/audit"
+func (api ApplyApi) SetAuditResult(applyId ID, auditResult AuditResultType, auditNodeId ID, auditFeedback string) (bool, error) {
+	endpoint := fmt.Sprintf("%d/audit", applyId)
 	request := map[string]any{
 		"auditResult":   auditResult,
 		"auditNodeId":   auditNodeId,
@@ -324,8 +324,8 @@ type ApplyComment struct {
 	MentionUserIds []ID
 }
 
-func (api ApplyApi) PageComment(applyId string, page int, size int) (PageResult[ApplyComment], error) {
-	endpoint := fmt.Sprintf("apply/%s/comment", applyId)
+func (api ApplyApi) PageComment(applyId ID, page int, size int) (PageResult[ApplyComment], error) {
+	endpoint := fmt.Sprintf("apply/%d/comment", applyId)
 	params := map[string]string{
 		"pageSize": strconv.Itoa(page),
 		"pageNum":  strconv.Itoa(size),
@@ -338,8 +338,8 @@ func (api ApplyApi) PageComment(applyId string, page int, size int) (PageResult[
 	return result.Result, nil
 }
 
-func (api ApplyApi) CreateComment(applyId string, comment ApplyComment) (ApplyComment, error) {
-	endpoint := fmt.Sprintf("apply/%s/comment", applyId)
+func (api ApplyApi) CreateComment(applyId ID, comment ApplyComment) (ApplyComment, error) {
+	endpoint := fmt.Sprintf("apply/%d/comment", applyId)
 	var result ApiResponse[ApplyComment]
 	err := api.client.post(endpoint, comment, &result)
 	if err != nil {
@@ -464,8 +464,8 @@ type ApplyPrintTemplate struct {
 /*
 获取单条数据对应打印模版文件
 */
-func (api ApplyApi) GetPrintTemplate(applyId string, userId string, auditNodeId ID) (ApplyPrintTemplate, error) {
-	endpoint := fmt.Sprintf("apply/%s/print", applyId)
+func (api ApplyApi) GetPrintTemplate(applyId ID, userId string, auditNodeId ID) (ApplyPrintTemplate, error) {
+	endpoint := fmt.Sprintf("apply/%d/print", applyId)
 	request := map[string]any{
 		"userId":      userId,
 		"auditNodeId": auditNodeId,
@@ -486,8 +486,8 @@ type QueIdSearchKey struct {
 /*
 获取数据表列表数据
 */
-func (api ApplyApi) PageChart(applyId string, query []QueIdSearchKey) (PageResult[Apply], error) {
-	endpoint := fmt.Sprintf("chart/%s/apply/filter", applyId)
+func (api ApplyApi) PageChart(applyId ID, query []QueIdSearchKey) (PageResult[Apply], error) {
+	endpoint := fmt.Sprintf("chart/%d/apply/filter", applyId)
 	request := map[string]any{
 		"accurateQuery": query,
 	}
