@@ -160,19 +160,19 @@ type Apply struct {
 }
 
 type Answer struct {
-	QueId       int      `json:"queId"`
+	QueId       ID       `json:"queId"`
 	QueTitle    string   `json:"queTitle"`
 	QueType     int      `json:"queType"`
 	TableValues []string `json:"tableValues"`
 	Values      []struct {
 		DataValue   string `json:"dataValue"`
-		Id          string `json:"id"`
+		Id          ID     `json:"id"`
 		Email       string `json:"email"`
 		OptionId    string `json:"optionId"`
 		Ordinal     string `json:"ordinal"`
 		OtherInfo   string `json:"otherInfo"`
 		PluginValue string `json:"pluginValue"`
-		QueId       int    `json:"queId"`
+		QueId       ID `json:"queId"`
 		Value       string `json:"value"`
 	} `json:"values"`
 }
