@@ -163,7 +163,7 @@ type Answer struct {
 	QueId       ID          `json:"queId"`
 	QueTitle    string      `json:"queTitle"`
 	QueType     int         `json:"queType"`
-	TableValues []SubAnswer `json:"tableValues"`
+	TableValues [][]SubAnswer `json:"tableValues"`
 	Values      []struct {
 		DataValue   string `json:"dataValue"`
 		Id          ID     `json:"id"`
