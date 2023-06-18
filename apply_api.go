@@ -160,10 +160,10 @@ type Apply struct {
 }
 
 type Answer struct {
-	QueId       ID       `json:"queId"`
-	QueTitle    string   `json:"queTitle"`
-	QueType     int      `json:"queType"`
-	TableValues []string `json:"tableValues"`
+	QueId       ID          `json:"queId"`
+	QueTitle    string      `json:"queTitle"`
+	QueType     int         `json:"queType"`
+	TableValues []SubAnswer `json:"tableValues"`
 	Values      []struct {
 		DataValue   string `json:"dataValue"`
 		Id          ID     `json:"id"`
@@ -172,9 +172,13 @@ type Answer struct {
 		Ordinal     string `json:"ordinal"`
 		OtherInfo   string `json:"otherInfo"`
 		PluginValue string `json:"pluginValue"`
-		QueId       ID `json:"queId"`
+		QueId       ID     `json:"queId"`
 		Value       string `json:"value"`
 	} `json:"values"`
+}
+
+type SubAnswer struct {
+	QueId ID `json:"queId"`
 }
 
 type Assignment struct {
