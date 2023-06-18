@@ -54,7 +54,7 @@ type Credential struct {
 func (api AuthApi) GrantToken(cred Credential) (AccessToken, error) {
 	path := fmt.Sprintf("/accessToken?wsId=%s&wsSecret=%s", cred.WsId, cred.WsSecret)
 	var resp ApiResponse[SimpleAccessToken]
-	err := api.client.get(path, &resp)
+	err := api.client.get(path, nil, &resp)
 	if err != nil {
 		return nil, err
 	}
@@ -62,4 +62,19 @@ func (api AuthApi) GrantToken(cred Credential) (AccessToken, error) {
 	token.ExpireAt = time.Now().Local().Add(time.Second * time.Duration(token.ExpireTime))
 
 	return token, nil
+}
+
+func (api AuthApi) GetAuthCode(userId SID) (string, error) {
+	endpoint := "user/login"
+	request := map[string]string{
+		"userId": string(userId),
+	}
+	var result ApiResponse[struct {
+		Code string `json:"code"`
+	}]
+	err := api.client.post(endpoint, request, &result)
+	if err != nil {
+		return "", err
+	}
+	return result.Result.Code, nil
 }
