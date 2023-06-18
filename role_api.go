@@ -86,21 +86,6 @@ func (api RoleApi) GetAll() ([]Role, error) {
 	return result.Result.Role, nil
 }
 
-type User struct {
-	AreaCode         string `json:"areaCode"`
-	BeingActive      bool   `json:"beingAtive"`
-	BeingDisabled    bool   `json:"beingDisabled"`
-	CustomDepartment []ID   `json:"customDepartment"`
-	CustomRole       []ID   `json:"customRole"`
-	Department       []ID   `json:"department"`
-	Email            string `json:"email"`
-	HeadImg          string `json:"headImg"`
-	MobileNum        string `json:"mobileNum"`
-	Name             string `json:"name"`
-	Role             []ID   `json:"role"`
-	UserId           string `json:"userId"`
-}
-
 func (api RoleApi) GetRoleUser(roleId ID) ([]User, error) {
 	endpoint := fmt.Sprintf("role")
 	var result ApiResponse[struct {
